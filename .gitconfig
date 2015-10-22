@@ -1,0 +1,13 @@
+[user]
+	email = wchen@restdevices.com
+	name = Walther Chen
+[core]
+    excludesfile = /home/hwchen/.gitignore_global
+	editor = vim
+[push]
+	default = current
+
+[alias]
+        lv = log --graph --all --pretty=format:\"%Cgreen%h%Creset  %s %Cred%an%Creset %Cblue%d%Creset\"
+[url "ssh://git@github.com/"]
+        insteadOf = https://github.com/
