@@ -1,13 +1,25 @@
-[user]
-	email = wchen@restdevices.com
-	name = Walther Chen
-[core]
-    excludesfile = /home/hwchen/.gitignore_global
-	editor = vim
+# for some reason this is the right order, instead of overriding if farther down
+[includeIf "gitdir:~/Private/"]
+    path = work.gitconfig
+[include]
+    path = user.gitconfig
+
 [push]
-	default = current
+	default = current 
+[core]
+	excludesfile = /home/hwchen/.gitignore_global
+	editor = nvim
 
 [alias]
         lv = log --graph --all --pretty=format:\"%Cgreen%h%Creset  %s %Cred%an%Creset %Cblue%d%Creset\"
-[url "ssh://git@github.com/"]
-        insteadOf = https://github.com/
+[init]
+    templateDir = ~/.config/git/template/
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[hub]
+	protocol = ssh
+[pull]
+	ff = only
