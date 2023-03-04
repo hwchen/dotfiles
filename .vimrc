@@ -59,6 +59,7 @@ Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
 Plug 'hrsh7th/cmp-path', {'branch': 'main'}
 Plug 'hrsh7th/nvim-cmp', {'branch': 'main'}
 Plug 'ray-x/lsp_signature.nvim'
+Plug 'lukas-reineke/lsp-format.nvim'
 
 " Only because nvim-cmp _requires_ snippets
 Plug 'hrsh7th/cmp-vsnip', {'branch': 'main'}
@@ -70,7 +71,7 @@ Plug 'junegunn/fzf.vim'
 " Fuzzy finder for symbols/outline only (for now)
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'branch': 'main', 'do': 'make' }
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Editor
@@ -101,12 +102,12 @@ Plug 'tetralux/odin.vim'
 " pyright installed from https://github.com/fannheyward/coc-pyright
 
 " Theme
-Plug 'EdenEast/nightfox.nvim'
+Plug 'EdenEast/nightfox.nvim', { 'branch': 'main' }
 
 " External
 Plug 'kassio/neoterm'
-Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}
 Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+Plug 'voldikss/vim-floaterm'
 
 call plug#end()
 
@@ -317,8 +318,20 @@ nnoremap <leader>/ :HopPattern<cr>
 lua << END
 
 -- for logs: tail -f /home/hwchen/.local/state/nvim/lsp.log
+-- vim.lsp.set_log_level("debug")
 
 require 'hop'.setup()
+require("lsp-format").setup {
+  rust = {
+    exclude = { "rust-analyzer" }
+  },
+  zig = {
+    exclude = { "zls" }
+  },
+  odin = {
+    sync = true
+  },
+}
 
 -- Used for tab-complete
 local has_words_before = function()
@@ -393,6 +406,8 @@ cmp.setup.cmdline(':', {
 
 -- Setup lspconfig.
 local on_attach = function(client, bufnr)
+  require("lsp-format").on_attach(client)
+
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
@@ -484,8 +499,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     update_in_insert = false,
   }
 )
-
---vim.lsp.set_log_level("debug")
 
 -- Telescope
 
