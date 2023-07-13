@@ -156,7 +156,9 @@ nnoremap <leader>s :Telescope lsp_workspace_symbols<CR>
 
 nnoremap <leader>o <cmd>Telescope find_files<cr>
 nnoremap <leader>g <cmd>Telescope live_grep<cr>
-nnoremap <leader>; <cmd>Telescope buffers<cr>
+" replaced with buffers picker
+"nnoremap <leader>; <cmd>Telescope buffers<cr>
+noremap <leader>; <cmd>lua require('telescope.builtin').buffers({sort_mru=true, ignore_current_buffer=true})<cr>
 
 
 "------------------------------------------------------
@@ -270,6 +272,7 @@ set list listchars=tab:»·,trail:·
 autocmd FileType javascript :setlocal sw=2 ts=2 noexpandtab autoindent"sts=2
 autocmd FileType html :setlocal sw=2 ts=2 noexpandtab autoindent"sts=2
 autocmd FileType css :setlocal sw=2 ts=2 noexpandtab autoindent"sts=2
+autocmd FileType nix :setlocal sw=2 ts=2 autoindent"sts=2
 
 " Change parens highlighting
 hi MatchParen cterm=bold ctermbg=black ctermfg=yellow
@@ -430,7 +433,7 @@ local on_attach = function(client, bufnr)
   --buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   buf_set_keymap('n', 'g:', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', 'g;', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostics.setloclist()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
   --buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
   -- Get signatures (and _only_ signatures) when in argument lists.
@@ -462,7 +465,7 @@ lspconfig.rust_analyzer.setup {
         symbol = {
           search = {
             kind = "all_symbols",
-            limit = 1024,
+            limit = 4096,
           },
         },
       },
